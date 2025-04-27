@@ -32,13 +32,18 @@ The application is deployed using the following AWS services:
 ```
 
 ## Prerequisites
-
+-
 - AWS Account with appropriate permissions
 - AWS credentials stored as GitHub secrets
 
 ## Initial Setup
 
 Before you can deploy your Spring Boot application to AWS using Terraform and GitHub Actions, you need to complete several prerequisite steps. This guide walks you through setting up all required resources and permissions.
+
+## Install CLI tools:
+ 
+- AWS v2 CLI - https://docs.aws.amazon.com/cli/latest/userguide/getting-started-install.html#getting-started-install-instructions
+- Git CLI
 
 ## 1. AWS Account Setup
 
@@ -81,7 +86,7 @@ Before you can deploy your Spring Boot application to AWS using Terraform and Gi
 
 ### Set Up S3 Bucket
 ```bash
-# Login to AWS account
+# Login to AWS account using your ACCESS_KEY_ID and SECRET_KEY
 aws configure
 
 # Create S3 bucket for Terraform state
