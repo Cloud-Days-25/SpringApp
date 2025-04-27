@@ -159,7 +159,7 @@ resource "aws_lb_target_group" "app_target_group" {
 # ALB Listener
 resource "aws_lb_listener" "http_listener" {
   load_balancer_arn = aws_lb.app_lb.arn
-  port              = 80
+  port              = 8080
   protocol          = "HTTP"
   
   default_action {
@@ -176,8 +176,8 @@ resource "aws_security_group" "lb" {
   
   ingress {
     protocol    = "tcp"
-    from_port   = 80
-    to_port     = 80
+    from_port   = 8080
+    to_port     = 8080
     cidr_blocks = ["0.0.0.0/0"]
   }
   
@@ -253,4 +253,60 @@ resource "aws_iam_role" "ecs_task_role" {
   tags = var.common_tags
 }
 
-# Additional task role policies can be attached here if needed
+# ECR API VPC Endpoint (interface)
+resource "aws_vpc_endpoint" "ecr_api" {
+  vpc_id              = module.vpc.vpc_id
+  service_name        = "com.amazonaws.${var.aws_region}.ecr.api"
+  vpc_endpoint_type   = "Interface"
+  subnet_ids          = module.vpc.private_subnets
+  security_group_ids  = [aws_security_group.vpc_endpoints_sg.id]
+  private_dns_enabled = true
+
+  tags = var.common_tags
+}
+
+# ECR DKR VPC Endpoint (interface)
+resource "aws_vpc_endpoint" "ecr_dkr" {
+  vpc_id              = module.vpc.vpc_id
+  service_name        = "com.amazonaws.${var.aws_region}.ecr.dkr"
+  vpc_endpoint_type   = "Interface"
+  subnet_ids          = module.vpc.private_subnets
+  security_group_ids  = [aws_security_group.vpc_endpoints_sg.id]
+  private_dns_enabled = true
+
+  tags = var.common_tags
+}
+
+# S3 Gateway Endpoint (needed for ECR image layer downloads)
+resource "aws_vpc_endpoint" "s3" {
+  vpc_id            = module.vpc.vpc_id
+  service_name      = "com.amazonaws.${var.aws_region}.s3"
+  vpc_endpoint_type = "Gateway"
+  route_table_ids   = module.vpc.private_route_table_ids
+
+  tags = var.common_tags
+}
+
+resource "aws_security_group" "vpc_endpoints_sg" {
+  name        = "${var.app_name}-vpc-endpoints-sg"
+  description = "Allow HTTPS (443) traffic for VPC endpoints"
+  vpc_id      = module.vpc.vpc_id
+
+  ingress {
+    description = "Allow HTTPS traffic from within VPC"
+    from_port   = 443
+    to_port     = 443
+    protocol    = "tcp"
+    cidr_blocks = [module.vpc.vpc_cidr_block]
+  }
+
+  egress {
+    description = "Allow all outbound traffic"
+    from_port   = 0
+    to_port     = 0
+    protocol    = "-1"
+    cidr_blocks = ["0.0.0.0/0"]
+  }
+
+  tags = var.common_tags
+}

@@ -54,8 +54,9 @@ Before you can deploy your Spring Boot application to AWS using Terraform and Gi
    ```
    Name: terraform-deployer
    Access type: Programmatic access
+   Group: iac
    ```
-4. Attach the following policies:
+4. Attach the following policies to group iac:
    - `AmazonECS_FullAccess`
    - `AmazonEC2ContainerRegistryFullAccess`
    - `AmazonVPCFullAccess`
@@ -66,7 +67,7 @@ Before you can deploy your Spring Boot application to AWS using Terraform and Gi
    - `IAMFullAccess`
    - `ElasticLoadBalancingFullAccess`
 
-5. After creating the user, save the Access Key ID and Secret Access Key securely in GitHub
+5. After creating the user, save the Access Key ID and Secret Access Key securely in GitHub and also download csv file with them.
 
 ### Enable Billing Alerts
 1. Log in to AWS Console with your root account
