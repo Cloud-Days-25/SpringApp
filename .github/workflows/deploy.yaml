@@ -55,7 +55,7 @@ jobs:
         id: ecr-repository
         working-directory: ./terraform
         run: |
-          REPO_URL=$(terraform output -raw ecr_repository_url)
+          REPO_URL=$(terraform output -raw ecr_repository_url 2>/dev/null | tr -d '\n')
           echo "repository_url=${REPO_URL}" >> $GITHUB_OUTPUT
 
     outputs:
