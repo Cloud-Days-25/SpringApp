@@ -57,9 +57,9 @@ jobs:
         run: |
           REPO_URL=$(terraform output -raw ecr_repository_url)
           echo "repository_url=${REPO_URL}" >> $GITHUB_OUTPUT
-          
-  outputs:
-    repository_url: ${{ steps.ecr-repository.outputs.repository_url }}
+
+    outputs:
+      repository_url: ${{ steps.ecr-repository.outputs.repository_url }}
 
   build-and-deploy:
     name: "Build and Deploy"
