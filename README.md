@@ -46,6 +46,24 @@ Before you can deploy your Spring Boot application to AWS using Terraform and Gi
 1. Go to [AWS Console](https://aws.amazon.com/)
 2. Click "Create an AWS Account" and follow the registration process
 3. Set up Multi-Factor Authentication (MFA) for the root account for security
+4. Apply Voucher - steps TODO
+
+### Enable Billing Alerts
+1. Log in to AWS Console with your root account
+2. Go to your account name in the top right corner → "My Account"
+3. Scroll to "Billing preferences" and check:
+   - "Receive Billing Alerts"
+   - "Receive PDF Invoice By Email"
+4. Click "Save preferences"
+
+
+### Create Your Admin User
+Recommended to use for everything (except billing) instead of your root user.
+Assign to new group: admins.
+Set permission `AdministratorAccess` to group.
+
+### Relogin using your admin user
+Perform everything via this user.
 
 ### Create an IAM User for Deployment
 1. Log in to AWS Console
@@ -69,13 +87,6 @@ Before you can deploy your Spring Boot application to AWS using Terraform and Gi
 
 5. After creating the user, save the Access Key ID and Secret Access Key securely in GitHub and also download csv file with them.
 
-### Enable Billing Alerts
-1. Log in to AWS Console with your root account
-2. Go to your account name in the top right corner → "My Account"
-3. Scroll to "Billing preferences" and check:
-   - "Receive Billing Alerts"
-   - "Receive PDF Invoice By Email"
-4. Click "Save preferences"
 
 ## 2. Create S3 Bucket and DynamoDB Table for Terraform State
 
@@ -217,7 +228,9 @@ cd terraform
 terraform destroy
 ```
 
-### 10. Update Configuration
+or you can trigger GitHub action called Terraform destroy manually, which will do the same thing.
+
+### 10. Update Configuration if needed
 
 Review and update:
 
@@ -276,11 +289,3 @@ docker build -t spring-boot-app .
 docker run -p 8080:8080 spring-boot-app
 ```
 
-## Cleanup
-
-To destroy all resources created by Terraform:
-
-```bash
-cd terraform
-terraform destroy
-```
