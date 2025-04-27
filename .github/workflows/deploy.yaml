@@ -5,6 +5,7 @@ on:
     branches:
       - main
       - master
+      - wip-impl
 
 env:
   AWS_REGION: us-east-1                  
