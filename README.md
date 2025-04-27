@@ -64,6 +64,7 @@ Before you can deploy your Spring Boot application to AWS using Terraform and Gi
    - `AmazonSNSFullAccess` (for billing alarms)
    - `CloudWatchFullAccess`
    - `IAMFullAccess`
+   - `ElasticLoadBalancingFullAccess`
 
 5. After creating the user, save the Access Key ID and Secret Access Key securely in GitHub
 

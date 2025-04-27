@@ -55,8 +55,11 @@ jobs:
         working-directory: ./terraform
         run: |
           REPO_URL=$(terraform output -raw ecr_repository_url)
-          echo "::set-output name=repository_url::${REPO_URL}"
-  
+          echo "repository_url=${REPO_URL}" >> $GITHUB_OUTPUT
+          
+  outputs:
+    repository_url: ${{ steps.ecr-repository.outputs.repository_url }}
+
   build-and-deploy:
     name: "Build and Deploy"
     needs: terraform
@@ -89,13 +92,11 @@ jobs:
         id: login-ecr
         uses: aws-actions/amazon-ecr-login@v1
       
-      - name: Get ECR Repository URL from Terraform
+      - name: Get ECR Repository URL
         id: get-repository-url
-        working-directory: ./terraform
         run: |
-          REPO_URL=$(terraform output -raw ecr_repository_url)
-          echo "repository_url=${REPO_URL}" >> $GITHUB_OUTPUT
-      
+          echo "repository_url=${{ needs.terraform.outputs.repository_url }}" >> $GITHUB_OUTPUT
+  
       - name: Build, tag, and push image to Amazon ECR
         id: build-image
         env:
