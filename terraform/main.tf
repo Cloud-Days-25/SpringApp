@@ -162,7 +162,7 @@ resource "aws_lb_target_group" "app_target_group" {
 # ALB Listener
 resource "aws_lb_listener" "http_listener" {
   load_balancer_arn = aws_lb.app_lb.arn
-  port              = 8080
+  port              = 80
   protocol          = "HTTP"
   
   default_action {
@@ -179,8 +179,8 @@ resource "aws_security_group" "lb" {
   
   ingress {
     protocol    = "tcp"
-    from_port   = 8080
-    to_port     = 8080
+    from_port   = 80
+    to_port     = 80
     cidr_blocks = ["0.0.0.0/0"]
   }
   
