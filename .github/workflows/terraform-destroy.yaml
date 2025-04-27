@@ -1,0 +1,46 @@
+name: Destroy Infrastructure
+
+on:
+  workflow_dispatch:  # manual trigger only
+
+env:
+  AWS_REGION: us-east-1
+  S3_BUCKET: terraform-state-spring-boot-app
+  DYNAMODB_TABLE: terraform-locks
+
+jobs:
+  destroy:
+    name: "Terraform Destroy and Cleanup"
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout Repository
+        uses: actions/checkout@v3
+      
+      - name: Configure AWS Credentials
+        uses: aws-actions/configure-aws-credentials@v2
+        with:
+          aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY_ID }}
+          aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+          aws-region: ${{ env.AWS_REGION }}
+
+      - name: Setup Terraform
+        uses: hashicorp/setup-terraform@v2
+        with:
+          terraform_version: 1.5.0
+
+      - name: Terraform Init
+        working-directory: ./terraform
+        run: terraform init
+
+      - name: Terraform Destroy
+        working-directory: ./terraform
+        run: terraform destroy -auto-approve
+
+      - name: Delete S3 bucket (Terraform State)
+        run: |
+          aws s3 rb s3://${{ env.S3_BUCKET }} --force
+
+      - name: Delete DynamoDB Table (Terraform Lock)
+        run: |
+          aws dynamodb delete-table --table-name ${{ env.DYNAMODB_TABLE }}
