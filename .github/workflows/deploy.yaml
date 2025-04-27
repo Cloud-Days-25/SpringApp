@@ -1,11 +1,7 @@
-name: Deploy Spring Boot App to AWS Fargate
+name: Deploy Spring Boot App to AWS
 
 on:
-  push:
-    branches:
-      - main
-      - master
-      - wip-impl
+  workflow_dispatch:  # manual trigger only
 
 env:
   AWS_REGION: us-east-1                  

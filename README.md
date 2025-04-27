@@ -31,8 +31,9 @@ The application is deployed using the following AWS services:
 └── README.md              # This file
 ```
 
+NOTE: Before doing any changes to this repository, fork it first!
+
 ## Prerequisites
--
 - AWS Account with appropriate permissions
 - AWS credentials stored as GitHub secrets
 
@@ -200,7 +201,7 @@ implementation 'org.springframework.boot:spring-boot-starter-web'
 ## 7. Initial Deployment
 
 1. Push your code to the main branch
-2. Go to the "Actions" tab in your GitHub repository
+2. Go to the "Actions" tab in your GitHub repository and trigger "Deploy Spring Boot App" action
 3. Watch as your first deployment runs
 4. Troubleshoot any issues by checking the workflow logs
 
