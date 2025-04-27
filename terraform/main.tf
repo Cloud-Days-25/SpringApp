@@ -280,6 +280,18 @@ resource "aws_vpc_endpoint" "ecr_dkr" {
   tags = var.common_tags
 }
 
+# CloudWatch Logs VPC Endpoint (Interface)
+resource "aws_vpc_endpoint" "logs" {
+  vpc_id              = module.vpc.vpc_id
+  service_name        = "com.amazonaws.${var.aws_region}.logs"
+  vpc_endpoint_type   = "Interface"
+  subnet_ids          = module.vpc.private_subnets
+  security_group_ids  = [aws_security_group.vpc_endpoints_sg.id]
+  private_dns_enabled = true
+
+  tags = var.common_tags
+}
+
 # S3 Gateway Endpoint (needed for ECR image layer downloads)
 resource "aws_vpc_endpoint" "s3" {
   vpc_id            = module.vpc.vpc_id
