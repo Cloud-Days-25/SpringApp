@@ -2,6 +2,8 @@
 This repository contains a Spring Boot application that is automatically deployed to AWS Fargate using GitHub Actions and Terraform for infrastructure as code.
 
 ## Architecture Overview
+![Architecture](doc/arch.png "Architecture")
+
 
 The application is deployed using the following AWS services:
 
