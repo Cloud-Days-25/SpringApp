@@ -14,6 +14,13 @@ The application is deployed using the following AWS services:
 - **VPC with public and private subnets**: Provides networking isolation
 - **CloudWatch Logs**: Collects application logs
 
+## Pipelines definitions
+### Deploy pipeline definition
+![Deploy](doc/deploy_pipeline_def.png "Deploy pipeline definition")
+### Destroy pipeline definition
+![Destroy](doc/destroy_pipeline_def.png "Destroy pipeline definition")
+
+
 ## Directory Structure
 
 ```
