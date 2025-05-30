@@ -94,7 +94,6 @@ Perform everything via this user.
    - `AmazonEC2ContainerRegistryFullAccess`
    - `AmazonVPCFullAccess`
    - `AmazonS3FullAccess` (for Terraform state)
-   - `AmazonDynamoDBFullAccess` (for Terraform state locking)
    - `AmazonSNSFullAccess` (for billing alarms)
    - `CloudWatchFullAccess`
    - `IAMFullAccess`
@@ -103,7 +102,7 @@ Perform everything via this user.
 5. After creating the user, save the Access Key ID and Secret Access Key securely in GitHub and also download csv file with them.
 
 
-## 2. Create S3 Bucket and DynamoDB Table for Terraform State
+## 2. Create S3 Bucket to store Terraform State
 
 ### Set Up S3 Bucket
 ```bash
@@ -134,29 +133,7 @@ aws s3api put-bucket-encryption \
   }'
 ```
 
-### Set Up DynamoDB Table for State Locking
-```bash
-# Create DynamoDB table for state locking
-aws dynamodb create-table \
-  --table-name terraform-locks \
-  --attribute-definitions AttributeName=LockID,AttributeType=S \
-  --key-schema AttributeName=LockID,KeyType=HASH \
-  --billing-mode PAY_PER_REQUEST \
-  --region us-east-1
-```
-
-## 3. Get the Latest ECS-Optimized AMI ID
-
-```bash
-# Get the latest ECS-optimized AMI ID for Amazon Linux 2
-aws ssm get-parameters \
-  --names /aws/service/ecs/optimized-ami/amazon-linux-2/recommended \
-  --region us-east-1
-
-# Look for the "image_id" in the output and use it in your variables.tf file
-```
-
-## 4. GitHub Repository Setup
+## 2. GitHub Repository Setup
 
 ### Create a New Repository
 1. Go to [GitHub](https://github.com/)
@@ -177,7 +154,7 @@ aws ssm get-parameters \
 1. Click on the "Actions" tab in your repository
 2. Confirm that you want to enable GitHub Actions
 
-## 5. Clone Your Repository and Add Configuration Files
+## 3. Clone Your Repository and Add Configuration Files
 
 ```bash
 # Clone your repository
@@ -202,7 +179,7 @@ git commit -m "Add deployment configuration"
 git push origin main
 ```
 
-## 6. Spring Boot Application Setup
+## 4. Spring Boot Application Setup
 
 Ensure your Spring Boot application:
 
@@ -218,14 +195,14 @@ implementation 'org.springframework.boot:spring-boot-starter-actuator'
 implementation 'org.springframework.boot:spring-boot-starter-web'
 ```
 
-## 7. Initial Deployment
+## 5. Initial Deployment
 
 1. Push your code to the main branch
 2. Go to the "Actions" tab in your GitHub repository and trigger "Deploy Spring Boot App" action
 3. Watch as your first deployment runs
 4. Troubleshoot any issues by checking the workflow logs
 
-## 8. Verify Setup 
+## 6. Verify Setup 
 
 After deployment, verify:
 
@@ -234,7 +211,7 @@ After deployment, verify:
 3. The billing alarm is properly configured
 4. You received an email to confirm the SNS subscription for billing alerts
 
-## 9. Cleanup When No Longer Needed
+## 7. Cleanup When No Longer Needed
 
 To avoid incurring any costs, you can destroy all resources when they're no longer needed:
 
@@ -245,7 +222,7 @@ terraform destroy
 
 or you can trigger GitHub action called Terraform destroy manually, which will do the same thing.
 
-### 10. Update Configuration if needed
+### 8. Update Configuration if needed
 
 Review and update:
 
