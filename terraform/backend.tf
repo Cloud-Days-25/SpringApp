@@ -3,7 +3,7 @@
 
 terraform {
   backend "s3" {
-    bucket         = "terraform-state-spring-boot-app-marianferenc-ibm-1"
+    bucket       = ""         # provided via -backend-config
     key            = "terraform.tfstate"
     region         = "us-east-1"
     encrypt        = true
